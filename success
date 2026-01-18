@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - Bookmark Manager Premium</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            color: #27ae60;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .activation-code {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px dashed #27ae60;
+        }
+
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 3px;
+            margin: 15px 0;
+            user-select: all;
+        }
+
+        .copy-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .copy-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .instructions {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #27ae60;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .instructions li {
+            margin: 10px 0;
+            padding-left: 5px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .email-sent {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">🎉</div>
+        <h1>Payment Successful!</h1>
+        <p>Thank you for upgrading to Premium!</p>
+
+        <div class="activation-code">
+            <p style="margin: 0 0 10px 0; color: #333; font-weight: 600;">Your Activation Code:</p>
+            <div class="code" id="activationCode">LOADING...</div>
+            <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+        </div>
+
+        <div class="instructions">
+            <h3>How to Activate Premium:</h3>
+            <ol>
+                <li>Copy the activation code above</li>
+                <li>Open <strong>Bookmark Manager Enhanced</strong></li>
+                <li>Click <strong>⚙️ Settings</strong></li>
+                <li>Click <strong>"Activate Premium"</strong></li>
+                <li>Paste your activation code</li>
+                <li>Enjoy ad-free experience! ✨</li>
+            </ol>
+        </div>
+
+        <div class="email-sent">
+            📧 A confirmation email with your activation code has been sent to your email address.
+        </div>
+
+        <a href="javascript:window.close()" class="cta-button">Close This Window</a>
+        
+        <p style="margin-top: 30px; font-size: 14px; color: #999;">
+            Need help? Contact: <a href="mailto:jureczk@amazon.co.uk" style="color: #667eea;">jureczk@amazon.co.uk</a>
+        </p>
+    </div>
+
+    <script>
+        // Generate activation code from session ID
+        function generateActivationCode() {
+            // Get Stripe session ID from URL (if available)
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+            
+            if (sessionId) {
+                // Use first 16 characters of session ID
+                return sessionId.substring(0, 16).toUpperCase();
+            } else {
+                // Generate random code
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                let code = '';
+                for (let i = 0; i < 16; i++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                    if ((i + 1) % 4 === 0 && i < 15) code += '-';
+                }
+                return code;
+            }
+        }
+
+        // Display activation code
+        const activationCode = generateActivationCode();
+        document.getElementById('activationCode').textContent = activationCode;
+
+        // Copy code to clipboard
+        function copyCode() {
+            const code = document.getElementById('activationCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#27ae60';
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy Code';
+                    btn.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Store activation code in localStorage for retrieval
+        localStorage.setItem('latestActivationCode', activationCode);
+    </script>
+</body>
+</html>
