@@ -8,6 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2785338779361987"
+crossorigin="anonymous"></script>
+
 <style>
 * {
 margin: 0;
@@ -34,7 +39,25 @@ color: #2c3e50;
 overflow-x: hidden;
 }
 
-/* Animated Background */
+/* Ad Container Styles */
+.ad-container {
+max-width: 728px;
+margin: 30px auto;
+text-align: center;
+padding: 20px;
+background: #f8f9fa;
+border-radius: 10px;
+border: 1px solid #e0e0e0;
+}
+
+.ad-label {
+font-size: 11px;
+color: #999;
+text-transform: uppercase;
+letter-spacing: 1px;
+margin-bottom: 10px;
+}
+
 .hero {
 position: relative;
 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -220,7 +243,6 @@ opacity: 0.9;
 font-weight: 500;
 }
 
-/* Floating Elements */
 .floating-emoji {
 position: absolute;
 font-size: 40px;
@@ -246,7 +268,6 @@ transform: translateY(30px) rotate(-5deg);
 }
 }
 
-/* Container */
 .container {
 max-width: 1200px;
 margin: 0 auto;
@@ -286,7 +307,6 @@ margin: 0 auto;
 line-height: 1.6;
 }
 
-/* Features Grid */
 .features {
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -349,7 +369,6 @@ font-size: 16px;
 line-height: 1.7;
 }
 
-/* Screenshot Section */
 .screenshot-section {
 background: linear-gradient(180deg, #f8f9fa 0%, white 100%);
 padding: 100px 20px;
@@ -385,7 +404,6 @@ font-weight: 700;
 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* Pricing Section */
 .pricing {
 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 padding: 100px 20px;
@@ -577,7 +595,6 @@ color: #2c3e50;
 background: #d5dbdb;
 }
 
-/* Testimonials */
 .testimonials {
 background: white;
 padding: 100px 20px;
@@ -661,7 +678,6 @@ color: #f39c12;
 font-size: 14px;
 }
 
-/* FAQ Section */
 .faq {
 background: #f8f9fa;
 padding: 100px 20px;
@@ -720,7 +736,6 @@ max-height: 300px;
 margin-top: 20px;
 }
 
-/* CTA Section */
 .cta-section {
 background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
 padding: 100px 20px;
@@ -760,7 +775,6 @@ margin-bottom: 40px;
 opacity: 0.9;
 }
 
-/* Footer */
 footer {
 background: #1a1a1a;
 color: white;
@@ -833,7 +847,6 @@ background: var(--primary);
 transform: translateY(-3px);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
 .hero h1 {
 font-size: 40px;
@@ -867,14 +880,17 @@ text-align: center;
 .social-links {
 justify-content: center;
 }
+
+.ad-container {
+max-width: 100%;
+padding: 15px;
+}
 }
 
-/* Smooth scroll */
 html {
 scroll-behavior: smooth;
 }
 
-/* Selection color */
 ::selection {
 background: var(--primary);
 color: white;
@@ -883,7 +899,6 @@ color: white;
 </head>
 <body>
 
-<!-- Hero Section -->
 <div class="hero">
 <div class="floating-emoji emoji-1">📌</div>
 <div class="floating-emoji emoji-2">🏷️</div>
@@ -925,7 +940,20 @@ Organize, search, and manage thousands of bookmarks effortlessly.
 </div>
 </div>
 
-<!-- Features Section -->
+<!-- Ad Section After Hero -->
+<div class="ad-container">
+<div class="ad-label">Advertisement</div>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2785338779361987"
+     data-ad-slot="4231064987""
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
 <div class="container" id="features">
 <div class="section-header">
 <div class="section-badge">✨ FEATURES</div>
@@ -986,7 +1014,20 @@ Powerful features to organize and manage your bookmarks like never before
 </div>
 </div>
 
-<!-- Screenshot Section -->
+<!-- Ad Section After Features -->
+<div class="ad-container">
+<div class="ad-label">Advertisement</div>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2785338779361987"
+     data-ad-slot="4231064987""
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
 <div class="screenshot-section">
 <div class="screenshot-container">
 <div class="screenshot-badge">🎨 Beautiful Interface</div>
@@ -999,7 +1040,6 @@ class="screenshot">
 </div>
 </div>
 
-<!-- Testimonials -->
 <div class="testimonials">
 <div class="container">
 <div class="section-header">
@@ -1056,16 +1096,28 @@ See what our users are saying about Bookmark Manager Enhanced
 </div>
 </div>
 
-<!-- Pricing Section -->
+<!-- Ad Section Before Pricing -->
+<div class="ad-container">
+<div class="ad-label">Advertisement</div>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2785338779361987"
+     data-ad-slot="4231064987""
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
 <div class="pricing" id="pricing">
 <div class="pricing-container">
 <div class="pricing-header">
 <h2>Choose Your Plan</h2>
-<p>Start free or upgrade to unlock the full potential</p>
+<p>Upgrade to Premium for an ad-free experience</p>
 </div>
 
 <div class="pricing-cards">
-<!-- Free Plan -->
 <div class="pricing-card">
 <div class="plan-name">Free</div>
 <div class="price">
@@ -1083,13 +1135,13 @@ See what our users are saying about Bookmark Manager Enhanced
 <li>Bulk operations</li>
 <li>Import/Export (JSON, CSV, HTML)</li>
 <li>Smart search</li>
+<li style="color: #e74c3c;">⚠️ Ads on website</li>
 </ul>
 <button class="plan-cta secondary" onclick="document.getElementById('installBtn').click()">
 Get Started Free
 </button>
 </div>
 
-<!-- Premium Plan -->
 <div class="pricing-card featured">
 <div class="pricing-badge">⭐ BEST VALUE</div>
 <div class="plan-name">Premium</div>
@@ -1100,7 +1152,7 @@ Get Started Free
 </div>
 <ul class="features-list">
 <li><strong>Everything in Free, plus:</strong></li>
-<li>🚫 <strong>Ad-free experience</strong></li>
+<li>🚫 <strong>Ad-free website experience</strong></li>
 <li>⚡ <strong>Priority support (24h)</strong></li>
 <li>🚀 <strong>Early access to features</strong></li>
 <li>💝 <strong>Support development</strong></li>
@@ -1117,7 +1169,6 @@ Start Premium Now
 </div>
 </div>
 
-<!-- FAQ Section -->
 <div class="faq" id="faq">
 <div class="container">
 <div class="section-header">
@@ -1131,7 +1182,16 @@ Start Premium Now
 What's included in the free version?
 </div>
 <div class="faq-answer">
-The free version includes ALL core features: unlimited bookmarks, pins, tags, collections, analytics, trash bin, dark mode, bulk operations, and import/export. The only difference is ads are shown to support development.
+The free version includes ALL core features: unlimited bookmarks, pins, tags, collections, analytics, trash bin, dark mode, bulk operations, and import/export. The only difference is ads are shown on this website to support development.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question">
+Are there ads in the browser extension?
+</div>
+<div class="faq-answer">
+No! The extension itself is completely ad-free for all users. Ads only appear on this promotional website. Premium removes ads from this website and provides additional benefits.
 </div>
 </div>
 
@@ -1171,13 +1231,32 @@ Yes! We love hearing from our users. Premium subscribers get priority for featur
 </div>
 </div>
 
+<div class="faq-item">
+<div class="faq-question">
+How does the 7-day money-back guarantee work?
+</div>
+<div class="faq-answer">
+If you're not satisfied with Premium for any reason within the first 7 days, simply email us at minstories11@gmail.com and we'll process a full refund, no questions asked.
+</div>
+</div>
+</div>
+</div>
+</div>
 
-</div>
-</div>
-</div>
+<!-- Ad Section Before CTA -->
+<div class="ad-container">
+<div class="ad-label">Advertisement</div>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2785338779361987"
+     data-ad-slot="4231064987""
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 </div>
 
-<!-- CTA Section -->
 <div class="cta-section">
 <div class="cta-content">
 <h2>Ready to Transform Your Bookmarks?</h2>
@@ -1194,7 +1273,6 @@ Yes! We love hearing from our users. Premium subscribers get priority for featur
 </div>
 </div>
 
-<!-- Footer -->
 <footer>
 <div class="footer-content">
 <div class="footer-section">
@@ -1205,7 +1283,7 @@ The most powerful and beautiful bookmark manager for Firefox. Made with ❤️ b
 <div class="social-links">
 <a href="https://github.com/minstories11" class="social-link" target="_blank" title="GitHub">🐙</a>
 <a href="mailto:minstories11@gmail.com" class="social-link" title="Email">✉️</a>
-<a href="https://addons.mozilla.org/en-US/firefox/user/19660912/" class="social-link" target="_blank" title="Firefox Add-ons">🦊</a>
+<a href="https://addons.mozilla.org/en-US/firefox/user/17927080/" class="social-link" target="_blank" title="Firefox Add-ons">🦊</a>
 </div>
 </div>
 
@@ -1241,13 +1319,12 @@ The most powerful and beautiful bookmark manager for Firefox. Made with ❤️ b
 </div>
 
 <div class="footer-bottom">
-<p>© 2026 Bookmark Manager Enhanced • Made with ❤️ by jureczk</p>
+<p>© 2024 Bookmark Manager Enhanced • Made with ❤️ by jureczk</p>
 <p style="margin-top: 10px;">All rights reserved • Firefox is a trademark of Mozilla Foundation</p>
 </div>
 </footer>
 
 <script>
-// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 anchor.addEventListener('click', function (e) {
 e.preventDefault();
@@ -1258,32 +1335,23 @@ target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 });
 
-// FAQ Accordion
 document.querySelectorAll('.faq-item').forEach(item => {
 item.addEventListener('click', function() {
 const wasActive = this.classList.contains('active');
-
-// Close all
 document.querySelectorAll('.faq-item').forEach(i => {
 i.classList.remove('active');
 });
-
-// Open clicked one (if it wasn't active)
 if (!wasActive) {
 this.classList.add('active');
 }
 });
 });
 
-// Install button handler
 const installButtons = document.querySelectorAll('#installBtn, #installBtnBottom, #installBtnFooter');
 installButtons.forEach(btn => {
 btn.addEventListener('click', (e) => {
 e.preventDefault();
-// Replace with your actual AMO URL after approval
 const amoUrl = 'https://addons.mozilla.org/firefox/addon/bookmark-manager-enhanced/';
-        
-// For now, show coming soon message
 alert(
 '🚀 Bookmark Manager Enhanced\n\n' +
 'Extension is currently in review by Mozilla.\n\n' +
@@ -1291,13 +1359,9 @@ alert(
 'Expected approval: 3-7 days\n\n' +
 'Want to be notified? Email: minstories11@gmail.com'
 );
-
-// Uncomment after AMO approval:
-// window.location.href = amoUrl;
 });
 });
 
-// Scroll animations
 const observerOptions = {
 threshold: 0.1,
 rootMargin: '0px 0px -100px 0px'
@@ -1312,7 +1376,6 @@ entry.target.style.transform = 'translateY(0)';
 });
 }, observerOptions);
 
-// Animate features on scroll
 document.querySelectorAll('.feature, .testimonial').forEach(el => {
 el.style.opacity = '0';
 el.style.transform = 'translateY(30px)';
@@ -1320,11 +1383,9 @@ el.style.transition = 'all 0.6s ease-out';
 observer.observe(el);
 });
 
-// Parallax effect on scroll
 window.addEventListener('scroll', () => {
 const scrolled = window.pageYOffset;
 const parallaxElements = document.querySelectorAll('.floating-emoji');
-    
 parallaxElements.forEach((el, index) => {
 const speed = 0.5 + (index * 0.1);
 el.style.transform = `translateY(${scrolled * speed}px)`;
@@ -1334,5 +1395,3 @@ el.style.transform = `translateY(${scrolled * speed}px)`;
 
 </body>
 </html>
-
-
