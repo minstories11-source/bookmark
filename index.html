@@ -1,1658 +1,814 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookmark Manager Enhanced - The Ultimate Firefox Bookmark Manager</title>
-    <meta name="description" content="Beautiful, powerful bookmark manager for Firefox with tags, collections, analytics, dark mode, and cloud sync. Organize your bookmarks like never before.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #667eea;
-            --primary-dark: #5568d3;
-            --secondary: #764ba2;
-            --success: #27ae60;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-            color: #2c3e50;
-            overflow-x: hidden;
-        }
-
-        /* Animated Background */
-        .hero {
-            position: relative;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 120px 20px 100px;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-            animation: float 20s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                transform: translateY(-20px) scale(1.05);
-            }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            animation: slideDown 0.6s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero h1 {
-            font-size: 64px;
-            margin-bottom: 25px;
-            font-weight: 800;
-            line-height: 1.2;
-            animation: slideUp 0.8s ease-out;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero p {
-            font-size: 22px;
-            margin-bottom: 40px;
-            opacity: 0.95;
-            font-weight: 400;
-            line-height: 1.6;
-            animation: slideUp 0.8s ease-out 0.2s backwards;
-        }
-
-        .cta-container {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            animation: slideUp 0.8s ease-out 0.4s backwards;
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: white;
-            color: var(--primary);
-            padding: 18px 40px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 700;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(102, 126, 234, 0.1);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .cta-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-        }
-
-        .cta-button.secondary {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .cta-button.secondary:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .hero-stats {
-            margin-top: 60px;
-            display: flex;
-            gap: 50px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeIn 1s ease-out 0.6s backwards;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-
-        /* Floating Elements */
-        .floating-emoji {
-            position: absolute;
-            font-size: 40px;
-            opacity: 0.15;
-            animation: float-emoji 15s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        .emoji-1 { top: 10%; left: 10%; animation-delay: 0s; }
-        .emoji-2 { top: 20%; right: 15%; animation-delay: 2s; }
-        .emoji-3 { bottom: 15%; left: 20%; animation-delay: 4s; }
-        .emoji-4 { bottom: 20%; right: 10%; animation-delay: 6s; }
-
-        @keyframes float-emoji {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateY(-30px) rotate(5deg);
-            }
-            75% {
-                transform: translateY(30px) rotate(-5deg);
-            }
-        }
-
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 100px 20px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 70px;
-        }
-
-        .section-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            font-weight: 800;
-        }
-
-        .section-subtitle {
-            font-size: 20px;
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* Features Grid */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            perspective: 1000px;
-        }
-
-        .feature {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transform: scaleX(0);
-            transition: transform 0.4s;
-        }
-
-        .feature:hover::before {
-            transform: scaleX(1);
-        }
-
-        .feature:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 56px;
-            margin-bottom: 25px;
-            display: inline-block;
-            transition: transform 0.4s;
-        }
-
-        .feature:hover .feature-icon {
-            transform: scale(1.2) rotate(5deg);
-        }
-
-        .feature h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #2c3e50;
-            font-weight: 700;
-        }
-
-        .feature p {
-            color: #666;
-            font-size: 16px;
-            line-height: 1.7;
-        }
-
-        .feature.coming-soon {
-            position: relative;
-        }
-
-        .feature.coming-soon::after {
-            content: 'COMING SOON';
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            animation: pulse-badge 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-badge {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        .feature.coming-soon {
-            opacity: 0.75;
-        }
-
-        /* Screenshot Section */
-        .screenshot-section {
-            background: linear-gradient(180deg, #f8f9fa 0%, white 100%);
-            padding: 100px 20px;
-        }
-
-        .screenshot-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .screenshot {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.2);
-            transition: transform 0.4s;
-        }
-
-        .screenshot:hover {
-            transform: scale(1.02);
-        }
-
-        .screenshot-badge {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            color: var(--primary);
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Pricing Section */
-        .pricing {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 100px 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pricing::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            top: -300px;
-            right: -300px;
-            animation: rotate 30s linear infinite;
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .pricing-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .pricing-header {
-            text-align: center;
-            margin-bottom: 60px;
-            color: white;
-        }
-
-        .pricing-header h2 {
-            font-size: 48px;
-            margin-bottom: 15px;
-            font-weight: 800;
-        }
-
-        .pricing-header p {
-            font-size: 20px;
-            opacity: 0.95;
-        }
-
-        .pricing-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .pricing-card {
-            background: white;
-            padding: 45px 35px;
-            border-radius: 25px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
-        }
-
-        .pricing-card.featured {
-            border: 4px solid #f39c12;
-            transform: scale(1.05);
-        }
-
-        .pricing-card.featured:hover {
-            transform: translateY(-15px) scale(1.07);
-        }
-
-        .pricing-badge {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-size: 13px;
-            font-weight: 800;
-            box-shadow: 0 5px 20px rgba(243, 156, 18, 0.4);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .plan-name {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .price {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .price-amount {
-            font-size: 56px;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-        }
-
-        .price-period {
-            font-size: 18px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .price-note {
-            font-size: 13px;
-            color: #999;
-            margin-top: 8px;
-        }
-
-        .features-list {
-            list-style: none;
-            margin: 30px 0;
-        }
-
-        .features-list li {
-            padding: 14px 0;
-            position: relative;
-            padding-left: 35px;
-            font-size: 15px;
-            color: #555;
-            line-height: 1.6;
-        }
-
-        .features-list li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--success);
-            font-weight: 900;
-            font-size: 20px;
-        }
-
-        .features-list li.coming-soon {
-            opacity: 0.6;
-        }
-
-        .features-list li.coming-soon::after {
-            content: "SOON";
-            background: #3498db;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 8px;
-            font-size: 9px;
-            font-weight: 700;
-            margin-left: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        .features-list li strong {
-            color: #2c3e50;
-            font-weight: 700;
-        }
-
-        .plan-cta {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .plan-cta.primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .plan-cta.primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
-        }
-
-        .plan-cta.secondary {
-            background: #ecf0f1;
-            color: #2c3e50;
-        }
-
-        .plan-cta.secondary:hover {
-            background: #d5dbdb;
-        }
-
-        /* Testimonials */
-        .testimonials {
-            background: white;
-            padding: 100px 20px;
-        }
-
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .testimonial {
-            background: #f8f9fa;
-            padding: 35px;
-            border-radius: 20px;
-            position: relative;
-            transition: transform 0.3s;
-        }
-
-        .testimonial:hover {
-            transform: translateY(-5px);
-        }
-
-        .testimonial::before {
-            content: '"';
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            font-size: 80px;
-            color: rgba(102, 126, 234, 0.1);
-            font-family: Georgia, serif;
-        }
-
-        .testimonial-text {
-            font-size: 16px;
-            color: #555;
-            line-height: 1.7;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .author-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: white;
-        }
-
-        .author-info {
-            flex: 1;
-        }
-
-        .author-name {
-            font-weight: 700;
-            color: #2c3e50;
-            font-size: 15px;
-        }
-
-        .author-role {
-            font-size: 13px;
-            color: #999;
-        }
-
-        .stars {
-            color: #f39c12;
-            font-size: 14px;
-        }
-
-        /* FAQ Section */
-        .faq {
-            background: #f8f9fa;
-            padding: 100px 20px;
-        }
-
-        .faq-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .faq-item:hover {
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .faq-question {
-            font-size: 20px;
-            font-weight: 700;
-            color: #2c3e50;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .faq-question::after {
-            content: '+';
-            font-size: 28px;
-            color: var(--primary);
-            transition: transform 0.3s;
-        }
-
-        .faq-item.active .faq-question::after {
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s;
-            color: #666;
-            font-size: 16px;
-            line-height: 1.7;
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 300px;
-            margin-top: 20px;
-        }
-
-        /* Roadmap */
-        .roadmap {
-            background: white;
-            padding: 100px 20px;
-        }
-
-        .roadmap-timeline {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .roadmap-timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-            transform: translateX(-50%);
-        }
-
-        .roadmap-item {
-            display: flex;
-            gap: 40px;
-            margin-bottom: 60px;
-            position: relative;
-        }
-
-        .roadmap-item:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        .roadmap-content {
-            flex: 1;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s;
-        }
-
-        .roadmap-content:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .roadmap-status {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            letter-spacing: 0.5px;
-        }
-
-        .roadmap-status.completed {
-            background: #d4edda;
-            color: #27ae60;
-        }
-
-        .roadmap-status.progress {
-            background: #fff3cd;
-            color: #f39c12;
-        }
-
-        .roadmap-status.planned {
-            background: #d6eaf8;
-            color: #3498db;
-        }
-
-        .roadmap-dot {
-            position: absolute;
-            left: 50%;
-            top: 30px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border: 4px solid var(--primary);
-            border-radius: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.1);
-        }
-
-        .roadmap-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .roadmap-date {
-            font-size: 14px;
-            color: #999;
-            margin-bottom: 15px;
-        }
-
-        .roadmap-features {
-            list-style: none;
-            margin-left: 0;
-        }
-
-        .roadmap-features li {
-            padding: 8px 0;
-            color: #666;
-            font-size: 15px;
-        }
-
-        .roadmap-features li::before {
-            content: '→';
-            margin-right: 10px;
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            padding: 100px 20px;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .cta-content {
-            position: relative;
-            z-index: 1;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .cta-section h2 {
-            font-size: 48px;
-            margin-bottom: 25px;
-            font-weight: 800;
-        }
-
-        .cta-section p {
-            font-size: 20px;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-
-        /* Footer */
-        footer {
-            background: #1a1a1a;
-            color: white;
-            padding: 60px 20px 30px;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 50px;
-            margin-bottom: 50px;
-        }
-
-        .footer-section h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 12px;
-        }
-
-        .footer-section a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.2s;
-            font-size: 15px;
-        }
-
-        .footer-section a:hover {
-            color: var(--primary);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-link {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 20px;
-            transition: all 0.3s;
-        }
-
-        .social-link:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 40px;
-            }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .section-title {
-                font-size: 36px;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
-
-            .pricing-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .roadmap-timeline::before {
-                left: 20px;
-            }
-
-            .roadmap-item {
-                flex-direction: column !important;
-                margin-left: 40px;
-            }
-
-            .roadmap-dot {
-                left: 20px;
-            }
-
-            .cta-section h2 {
-                font-size: 32px;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .social-links {
-                justify-content: center;
-            }
-        }
-
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Selection color */
-        ::selection {
-            background: var(--primary);
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="floating-emoji emoji-1">📌</div>
-        <div class="floating-emoji emoji-2">🏷️</div>
-        <div class="floating-emoji emoji-3">📚</div>
-        <div class="floating-emoji emoji-4">⭐</div>
-        
-        <div class="hero-content">
-            <div class="badge">🚀 NEW RELEASE v2.3</div>
-            <h1>Bookmark Manager<br>Enhanced</h1>
-            <p>
-                The most powerful and beautiful bookmark manager for Firefox.<br>
-                Organize, search, and manage thousands of bookmarks effortlessly.
-            </p>
-            
-            <div class="cta-container">
-                <a href="#" class="cta-button" id="installBtn">
-                    <span>🔖</span>
-                    <span>Install Free for Firefox</span>
-                </a>
-                <a href="#features" class="cta-button secondary">
-                    <span>Learn More</span>
-                </a>
-            </div>
-
-            <div class="hero-stats">
-                <div class="stat">
-                    <div class="stat-value">⭐⭐⭐⭐⭐</div>
-                    <div class="stat-label">5-Star Reviews</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">100%</div>
-                    <div class="stat-label">Free & Open</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">🔒</div>
-                    <div class="stat-label">Privacy First</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Features Section -->
-    <div class="container" id="features">
-        <div class="section-header">
-            <div class="section-badge">✨ FEATURES</div>
-            <h2 class="section-title">Everything You Need</h2>
-            <p class="section-subtitle">
-                Powerful features to organize and manage your bookmarks like never before
-            </p>
-        </div>
-
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">📌</div>
-                <h3>Pin Important Bookmarks</h3>
-                <p>Keep your most-used bookmarks at the top for instant access. Perfect for daily workflow optimization.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">🏷️</div>
-                <h3>Smart Tags & Collections</h3>
-                <p>Organize with custom tags and create themed collections. Find anything in seconds with intelligent filtering.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">📊</div>
-                <h3>Visit Analytics</h3>
-                <p>Track which bookmarks you use most. Make data-driven decisions about your browsing habits.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">🗑️</div>
-                <h3>Smart Trash Bin</h3>
-                <p>30-day recovery window for deleted bookmarks. Automatic cleanup keeps things tidy.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">🎨</div>
-                <h3>Beautiful Dark Mode</h3>
-                <p>Gorgeous dark theme that's easy on your eyes. Seamlessly adapts to your preference.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <h3>Lightning-Fast Bulk Operations</h3>
-                <p>Select multiple bookmarks and perform actions in bulk. Save time with powerful batch operations.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">📥</div>
-                <h3>Import/Export Anywhere</h3>
-                <p>Import from JSON, CSV, or HTML. Export for backup or migration. Your data, your control.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">🔍</div>
-                <h3>Instant Search</h3>
-                <p>Find any bookmark instantly by title, URL, or tags. Lightning-fast fuzzy search included.</p>
-            </div>
-
-            <div class="feature coming-soon">
-                <div class="feature-icon">☁️</div>
-                <h3>Cloud Backup</h3>
-                <p>Automatic cloud backup of all your bookmarks. Never lose your data again.</p>
-            </div>
-
-            <div class="feature coming-soon">
-                <div class="feature-icon">🔄</div>
-                <h3>Cross-Device Sync</h3>
-                <p>Access your bookmarks on all your devices. Seamless synchronization across Firefox installations.</p>
-            </div>
-
-            <div class="feature coming-soon">
-                <div class="feature-icon">🤖</div>
-                <h3>AI-Powered Organization</h3>
-                <p>Let AI automatically categorize and organize your bookmarks based on content and usage patterns.</p>
-            </div>
-
-            <div class="feature coming-soon">
-                <div class="feature-icon">📱</div>
-                <h3>Mobile Companion</h3>
-                <p>Manage bookmarks on the go with our upcoming mobile companion app.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Screenshot Section -->
-    <div class="screenshot-section">
-        <div class="screenshot-container">
-            <div class="screenshot-badge">🎨 Beautiful Interface</div>
-            <img src="https://via.placeholder.com/1100x700/667eea/ffffff?text=Bookmark+Manager+Screenshot" 
-                 alt="Bookmark Manager Interface" 
-                 class="screenshot">
-            <p style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
-                *Interface shown is representative. Actual design may vary.
-            </p>
-        </div>
-    </div>
-
-    <!-- Testimonials -->
-    <div class="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-badge">💬 TESTIMONIALS</div>
-                <h2 class="section-title">Loved by Thousands</h2>
-                <p class="section-subtitle">
-                    See what our users are saying about Bookmark Manager Enhanced
-                </p>
-            </div>
-
-            <div class="testimonial-grid">
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        "This extension completely transformed how I manage my bookmarks. The tagging system is genius!"
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">S</div>
-                        <div class="author-info">
-                            <div class="author-name">Sarah M.</div>
-                            <div class="author-role">Product Manager</div>
-                            <div class="stars">⭐⭐⭐⭐⭐</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        "Finally, a bookmark manager that actually makes sense. The bulk operations save me so much time!"
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">J</div>
-                        <div class="author-info">
-                            <div class="author-name">James T.</div>
-                            <div class="author-role">Software Developer</div>
-                            <div class="stars">⭐⭐⭐⭐⭐</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        "The dark mode is beautiful and the premium version is worth every penny. No more ads!"
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">M</div>
-                        <div class="author-info">
-                            <div class="author-name">Maria L.</div>
-                            <div class="author-role">Designer</div>
-                            <div class="stars">⭐⭐⭐⭐⭐</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pricing Section -->
-    <div class="pricing">
-        <div class="pricing-container">
-            <div class="pricing-header">
-                <h2>Choose Your Plan</h2>
-                <p>Start free or upgrade to unlock the full potential</p>
-            </div>
-
-            <div class="pricing-cards">
-                <!-- Free Plan -->
-                <div class="pricing-card">
-                    <div class="plan-name">Free</div>
-                    <div class="price">
-                        <div class="price-amount">$0</div>
-                        <div class="price-period">forever</div>
-                    </div>
-                    <ul class="features-list">
-                        <li><strong>All core features included:</strong></li>
-                        <li>Unlimited bookmarks</li>
-                        <li>Pin bookmarks</li>
-                        <li>Tags & collections</li>
-                        <li>Visit analytics</li>
-                        <li>Trash bin (30-day recovery)</li>
-                        <li>Dark mode</li>
-                        <li>Bulk operations</li>
-                        <li>Import/Export (JSON, CSV, HTML)</li>
-                        <li>Smart search</li>
-                    </ul>
-                    <button class="plan-cta secondary" onclick="document.getElementById('installBtn').click()">
-                        Get Started Free
-                    </button>
-                </div>
-
-                <!-- Premium Plan -->
-                <div class="pricing-card featured">
-                    <div class="pricing-badge">⭐ BEST VALUE</div>
-                    <div class="plan-name">Premium</div>
-                    <div class="price">
-                        <div class="price-amount">$2.99</div>
-                        <div class="price-period">per month</div>
-                        <div class="price-note">🎁 Lock in this price forever</div>
-                    </div>
-                    <ul class="features-list">
-                        <li><strong>Everything in Free, plus:</strong></li>
-                        <li>🚫 <strong>Ad-free experience</strong></li>
-                        <li>⚡ <strong>Priority support (24h)</strong></li>
-                        <li>🚀 <strong>Early access to features</strong></li>
-                        <li>💝 <strong>Support development</strong></li>
-                        <li class="coming-soon">☁️ Cloud backup & restore</li>
-                        <li class="coming-soon">🔄 Sync across devices</li>
-                        <li class="coming-soon">📊 Advanced analytics dashboard</li>
-                        <li class="coming-soon">🎨 Custom color themes</li>
-                        <li class="coming-soon">🤖 AI-powered organization</li>
-                        <li class="coming-soon">📱 Mobile companion app</li>
-                    </ul>
-                    <button class="plan-cta primary" onclick="document.getElementById('installBtn').click()">
-                        Start Premium Now
-                    </button>
-                    <p style="text-align: center; margin-top: 20px; font-size: 13px; color: #666;">
-                        💡 Coming Soon features included at no extra cost
-                    </p>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 50px; color: rgba(255, 255, 255, 0.8);">
-                <p style="font-size: 16px; margin-bottom: 10px;">💳 Secure payment via Stripe • 🔒 Cancel anytime • ✨ 7-day money-back guarantee</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Roadmap Section -->
-    <div class="roadmap">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-badge">🗓️ ROADMAP</div>
-                <h2 class="section-title">Development Timeline</h2>
-                <p class="section-subtitle">
-                    Our commitment to continuous improvement and innovation
-                </p>
-            </div>
-
-            <div class="roadmap-timeline">
-                <div class="roadmap-item">
-                    <div class="roadmap-dot"></div>
-                    <div class="roadmap-content">
-                        <span class="roadmap-status completed">✅ COMPLETED</span>
-                        <h3 class="roadmap-title">Version 2.3 - Foundation</h3>
-                        <div class="roadmap-date">Released: January 2024</div>
-                        <ul class="roadmap-features">
-                            <li>Core bookmark management</li>
-                            <li>Tags and collections</li>
-                            <li>Dark mode theme</li>
-                            <li>Premium subscription system</li>
-                            <li>Ad-free experience for premium</li>
-                        </ul>
-                    </div>
-                    <div style="flex: 1;"></div>
-                </div>
-
-                <div class="roadmap-item">
-                    <div class="roadmap-dot"></div>
-                    <div style="flex: 1;"></div>
-                    <div class="roadmap-content">
-                        <span class="roadmap-status progress">🚧 IN PROGRESS</span>
-                        <h3 class="roadmap-title">Version 2.4 - Enhanced Experience</h3>
-                        <div class="roadmap-date">Expected: Q1 2024</div>
-                        <ul class="roadmap-features">
-                            <li>Custom color themes (5+ options)</li>
-                            <li>Enhanced analytics dashboard</li>
-                            <li>Bookmark notes & descriptions</li>
-                            <li>Smart auto-categorization</li>
-                            <li>Keyboard shortcuts</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="roadmap-item">
-                    <div class="roadmap-dot"></div>
-                    <div class="roadmap-content">
-                        <span class="roadmap-status planned">📅 PLANNED</span>
-                        <h3 class="roadmap-title">Version 3.0 - Cloud & Sync</h3>
-                        <div class="roadmap-date">Expected: Q2 2024</div>
-                        <ul class="roadmap-features">
-                            <li>☁️ Cloud backup & restore</li>
-                            <li>🔄 Cross-device synchronization</li>
-                            <li>📱 Mobile companion app (iOS/Android)</li>
-                            <li>🔐 End-to-end encryption</li>
-                            <li>👥 Shared collections</li>
-                        </ul>
-                    </div>
-                    <div style="flex: 1;"></div>
-                </div>
-
-                <div class="roadmap-item">
-                    <div class="roadmap-dot"></div>
-                    <div style="flex: 1;"></div>
-                    <div class="roadmap-content">
-                        <span class="roadmap-status planned">🔮 FUTURE</span>
-                        <h3 class="roadmap-title">Version 4.0 - AI & Automation</h3>
-                        <div class="roadmap-date">Expected: Q3-Q4 2026</div>
-                        <ul class="roadmap-features">
-                            <li>🤖 AI-powered bookmark organization</li>
-                            <li>🎯 Smart recommendations</li>
-                            <li>📈 Advanced insights & reports</li>
-                            <li>🔗 API access for developers</li>
-                            <li>🌐 Chrome/Edge extension</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- FAQ Section -->
-    <div class="faq">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-badge">❓ FAQ</div>
-                <h2 class="section-title">Frequently Asked Questions</h2>
-            </div>
-
-            <div class="faq-container">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        What does "Coming Soon" mean?
-                    </div>
-                    <div class="faq-answer">
-                        Features marked "Coming Soon" are actively in development and will be added to Premium subscriptions at no extra cost. We release new features every 2-3 months based on our roadmap.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        When will Cloud Backup be available?
-                    </div>
-                    <div class="faq-answer">
-                        Cloud Backup and Cross-Device Sync are planned for Q2 2024 (Version 3.0). All Premium subscribers will automatically get access when released. We'll notify you via email when new features launch.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        Will I pay more when new features are added?
-                    </div>
-                    <div class="faq-answer">
-                        No! Your subscription price is locked in forever at $2.99/month. All future premium features will be included at no additional cost. This is our promise to early adopters.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        Can I cancel my Premium subscription?
-                    </div>
-                    <div class="faq-answer">
-                        Yes, you can cancel anytime with no penalties. Your Premium access remains active until the end of your current billing period. We also offer a 7-day money-back guarantee if you're not satisfied.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        Is my data private and secure?
-                    </div>
-                    <div class="faq-answer">
-                        Absolutely! All bookmark data is stored locally on your device. We don't collect, track, or sell your data. Premium subscriptions are processed securely through Stripe, and we never see your payment information.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        What's included in the free version?
-                    </div>
-                    <div class="faq-answer">
-                        The free version includes ALL core features: unlimited bookmarks, pins, tags, collections, analytics, trash bin, dark mode, bulk operations, and import/export. The only difference is ads are shown to support development.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        How do I get support?
-                    </div>
-                    <div class="faq-answer">
-                        Free users get community support via email (48-72h response time). Premium users get priority support with guaranteed 24-hour response time. Email us at: minstories11@gmail.com
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        Can I request new features?
-                    </div>
-                    <div class="faq-answer">
-                        Yes! We love hearing from our users. Premium subscribers get priority for feature requests. Send your ideas to minstories11@gmail.com with subject "Feature Request".
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CTA Section -->
-    <div class="cta-section">
-        <div class="cta-content">
-            <h2>Ready to Transform Your Bookmarks?</h2>
-            <p>Join thousands of users who've already upgraded their bookmark management</p>
-            <div class="cta-container">
-                <a href="#" class="cta-button" id="installBtnBottom">
-                    <span>🔖</span>
-                    <span>Install Free for Firefox</span>
-                </a>
-            </div>
-            <p style="margin-top: 30px; font-size: 14px; opacity: 0.7;">
-                ⚡ Installs in seconds • 🔒 Privacy-focused • ⭐ 5-star rated
-            </p>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>🔖 Bookmark Manager</h3>
-                <p style="color: rgba(255, 255, 255, 0.7); margin-top: 15px; font-size: 15px; line-height: 1.7;">
-                    The most powerful and beautiful bookmark manager for Firefox. Made with ❤️ by jureczk.
-                </p>
-                <div class="social-links">
-                    <a href="https://github.com/minstories11" class="social-link" target="_blank" title="GitHub">🐙</a>
-                    <a href="mailto:minstories11@gmail.com" class="social-link" title="Email">✉️</a>
-                    <a href="https://addons.mozilla.org/en-US/firefox/user/17927080/" class="social-link" target="_blank" title="Firefox Add-ons">🦊</a>
-                </div>
-            </div>
-
-            <div class="footer-section">
-                <h3>Product</h3>
-                <ul>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#roadmap">Roadmap</a></li>
-                    <li><a href="#faq">FAQ</a></li>
-                    <li><a href="#" id="installBtnFooter">Download</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Support</h3>
-                <ul>
-                    <li><a href="mailto:minstories11@gmail.com">Contact Us</a></li>
-                    <li><a href="#privacy">Privacy Policy</a></li>
-                    <li><a href="#" onclick="alert('Terms: Use of this extension is subject to Firefox Add-ons policies. No warranty provided. Use at your own risk.'); return false;">Terms of Service</a></li>
-                    <li><a href="https://github.com/minstories11/bookmark-manager/issues" target="_blank">Report Bug</a></li>
-                    <li><a href="mailto:minstories11@gmail.com?subject=Feature Request">Feature Request</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>More Projects</h3>
-                <ul>
-                    <li><a href="https://addons.mozilla.org/firefox/addon/qr-generator-pro/" target="_blank">📱 QR Generator Pro</a></li>
-                    <li><a href="https://minstories11-source.github.io/minstories11.github.io/" target="_blank">🏠 All Extensions</a></li>
-                    <li><a href="https://github.com/minstories11" target="_blank">💻 GitHub Profile</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>© 2024 Bookmark Manager Enhanced • Made with ❤️ by jureczk</p>
-            <p style="margin-top: 10px;">All rights reserved • Firefox is a trademark of Mozilla Foundation</p>
-        </div>
-    </footer>
-
-    <script>
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // FAQ Accordion
-        document.querySelectorAll('.faq-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const wasActive = this.classList.contains('active');
-                
-                // Close all
-                document.querySelectorAll('.faq-item').forEach(i => {
-                    i.classList.remove('active');
-                });
-                
-                // Open clicked one (if it wasn't active)
-                if (!wasActive) {
-                    this.classList.add('active');
-                }
-            });
-        });
-
-        // Install button handler
-        const installButtons = document.querySelectorAll('#installBtn, #installBtnBottom, #installBtnFooter');
-        installButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Replace with your actual AMO URL after approval
-                const amoUrl = 'https://addons.mozilla.org/firefox/addon/bookmark-manager-enhanced/';
-                
-                // For now, show coming soon message
-                alert(
-                    '🚀 Bookmark Manager Enhanced\n\n' +
-                    'Extension is currently in review by Mozilla.\n\n' +
-                    'We\'ll update this page with the download link once approved!\n\n' +
-                    'Expected approval: 3-7 days\n\n' +
-                    'Want to be notified? Email: minstories11@gmail.com'
-                );
-                
-                // Uncomment after AMO approval:
-                // window.location.href = amoUrl;
-            });
-        });
-
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Animate features on scroll
-        document.querySelectorAll('.feature, .testimonial, .roadmap-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.6s ease-out';
-            observer.observe(el);
-        });
-
-        // Parallax effect on scroll
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallaxElements = document.querySelectorAll('.floating-emoji');
-            
-            parallaxElements.forEach((el, index) => {
-                const speed = 0.5 + (index * 0.1);
-                el.style.transform = `translateY(${scrolled * speed}px)`;
-            });
-        });
-    </script>
-</body>
-</html>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookmark Manager Enhanced - The Ultimate Firefox Bookmark Manager</title>
+<meta name="description" content="Beautiful, powerful bookmark manager for Firefox with tags, collections, analytics, dark mode. Organize your bookmarks like never before.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+:root {
+--primary: #667eea;
+--primary-dark: #5568d3;
+--secondary: #764ba2;
+--success: #27ae60;
+--warning: #f39c12;
+--danger: #e74c3c;
+--dark: #2c3e50;
+--light: #ecf0f1;
+--gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+body {
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+line-height: 1.6;
+color: #2c3e50;
+overflow-x: hidden;
+}
+
+/* Animated Background */
+.hero {
+position: relative;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+padding: 120px 20px 100px;
+text-align: center;
+overflow: hidden;
+}
+
+.hero::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background:
+radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+0%, 100% {
+transform: translateY(0) scale(1);
+}
+50% {
+transform: translateY(-20px) scale(1.05);
+}
+}
+
+.hero-content {
+position: relative;
+z-index: 1;
+max-width: 900px;
+margin: 0 auto;
+}
+
+.badge {
+display: inline-block;
+background: rgba(255, 255, 255, 0.2);
+backdrop-filter: blur(10px);
+padding: 8px 20px;
+border-radius: 50px;
+font-size: 14px;
+font-weight: 600;
+margin-bottom: 30px;
+border: 1px solid rgba(255, 255, 255, 0.3);
+animation: slideDown 0.6s ease-out;
+}
+
+@keyframes slideDown {
+from {
+opacity: 0;
+transform: translateY(-30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.hero h1 {
+font-size: 64px;
+margin-bottom: 25px;
+font-weight: 800;
+line-height: 1.2;
+animation: slideUp 0.8s ease-out;
+text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slideUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.hero p {
+font-size: 22px;
+margin-bottom: 40px;
+opacity: 0.95;
+font-weight: 400;
+line-height: 1.6;
+animation: slideUp 0.8s ease-out 0.2s backwards;
+}
+
+.cta-container {
+display: flex;
+gap: 20px;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+animation: slideUp 0.8s ease-out 0.4s backwards;
+}
+
+.cta-button {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+background: white;
+color: var(--primary);
+padding: 18px 40px;
+text-decoration: none;
+border-radius: 50px;
+font-size: 18px;
+font-weight: 700;
+box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+overflow: hidden;
+}
+
+.cta-button::before {
+content: '';
+position: absolute;
+top: 50%;
+left: 50%;
+width: 0;
+height: 0;
+border-radius: 50%;
+background: rgba(102, 126, 234, 0.1);
+transform: translate(-50%, -50%);
+transition: width 0.6s, height 0.6s;
+}
+
+.cta-button:hover::before {
+width: 300px;
+height: 300px;
+}
+
+.cta-button:hover {
+transform: translateY(-5px);
+box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+}
+
+.cta-button.secondary {
+background: rgba(255, 255, 255, 0.15);
+color: white;
+backdrop-filter: blur(10px);
+border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.cta-button.secondary:hover {
+background: rgba(255, 255, 255, 0.25);
+}
+
+.hero-stats {
+margin-top: 60px;
+display: flex;
+gap: 50px;
+justify-content: center;
+flex-wrap: wrap;
+animation: fadeIn 1s ease-out 0.6s backwards;
+}
+
+@keyframes fadeIn {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
+}
+
+.stat {
+text-align: center;
+}
+
+.stat-value {
+font-size: 36px;
+font-weight: 800;
+margin-bottom: 5px;
+}
+
+.stat-label {
+font-size: 14px;
+opacity: 0.9;
+font-weight: 500;
+}
+
+/* Floating Elements */
+.floating-emoji {
+position: absolute;
+font-size: 40px;
+opacity: 0.15;
+animation: float-emoji 15s ease-in-out infinite;
+pointer-events: none;
+}
+
+.emoji-1 { top: 10%; left: 10%; animation-delay: 0s; }
+.emoji-2 { top: 20%; right: 15%; animation-delay: 2s; }
+.emoji-3 { bottom: 15%; left: 20%; animation-delay: 4s; }
+.emoji-4 { bottom: 20%; right: 10%; animation-delay: 6s; }
+
+@keyframes float-emoji {
+0%, 100% {
+transform: translateY(0) rotate(0deg);
+}
+25% {
+transform: translateY(-30px) rotate(5deg);
+}
+75% {
+transform: translateY(30px) rotate(-5deg);
+}
+}
+
+/* Container */
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 100px 20px;
+}
+
+.section-header {
+text-align: center;
+margin-bottom: 70px;
+}
+
+.section-badge {
+display: inline-block;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+padding: 6px 16px;
+border-radius: 20px;
+font-size: 13px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 1px;
+margin-bottom: 20px;
+}
+
+.section-title {
+font-size: 48px;
+margin-bottom: 20px;
+color: #2c3e50;
+font-weight: 800;
+}
+
+.section-subtitle {
+font-size: 20px;
+color: #666;
+max-width: 700px;
+margin: 0 auto;
+line-height: 1.6;
+}
+
+/* Features Grid */
+.features {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+gap: 30px;
+perspective: 1000px;
+}
+
+.feature {
+background: white;
+padding: 40px 30px;
+border-radius: 20px;
+box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+overflow: hidden;
+}
+
+.feature::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 5px;
+background: linear-gradient(90deg, #667eea, #764ba2);
+transform: scaleX(0);
+transition: transform 0.4s;
+}
+
+.feature:hover::before {
+transform: scaleX(1);
+}
+
+.feature:hover {
+transform: translateY(-10px);
+box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
+}
+
+.feature-icon {
+font-size: 56px;
+margin-bottom: 25px;
+display: inline-block;
+transition: transform 0.4s;
+}
+
+.feature:hover .feature-icon {
+transform: scale(1.2) rotate(5deg);
+}
+
+.feature h3 {
+font-size: 24px;
+margin-bottom: 15px;
+color: #2c3e50;
+font-weight: 700;
+}
+
+.feature p {
+color: #666;
+font-size: 16px;
+line-height: 1.7;
+}
+
+/* Screenshot Section */
+.screenshot-section {
+background: linear-gradient(180deg, #f8f9fa 0%, white 100%);
+padding: 100px 20px;
+}
+
+.screenshot-container {
+max-width: 1100px;
+margin: 0 auto;
+position: relative;
+}
+
+.screenshot {
+width: 100%;
+border-radius: 20px;
+box-shadow: 0 30px 90px rgba(0, 0, 0, 0.2);
+transition: transform 0.4s;
+}
+
+.screenshot:hover {
+transform: scale(1.02);
+}
+
+.screenshot-badge {
+position: absolute;
+top: -20px;
+left: 50%;
+transform: translateX(-50%);
+background: white;
+color: var(--primary);
+padding: 12px 30px;
+border-radius: 50px;
+font-weight: 700;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Pricing Section */
+.pricing {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+padding: 100px 20px;
+position: relative;
+overflow: hidden;
+}
+
+.pricing::before {
+content: '';
+position: absolute;
+width: 600px;
+height: 600px;
+background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+top: -300px;
+right: -300px;
+animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+from {
+transform: rotate(0deg);
+}
+to {
+transform: rotate(360deg);
+}
+}
+
+.pricing-container {
+max-width: 1100px;
+margin: 0 auto;
+position: relative;
+z-index: 1;
+}
+
+.pricing-header {
+text-align: center;
+margin-bottom: 60px;
+color: white;
+}
+
+.pricing-header h2 {
+font-size: 48px;
+margin-bottom: 15px;
+font-weight: 800;
+}
+
+.pricing-header p {
+font-size: 20px;
+opacity: 0.95;
+}
+
+.pricing-cards {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+gap: 30px;
+max-width: 1000px;
+margin: 0 auto;
+}
+
+.pricing-card {
+background: white;
+padding: 45px 35px;
+border-radius: 25px;
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+}
+
+.pricing-card:hover {
+transform: translateY(-15px) scale(1.02);
+box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+}
+
+.pricing-card.featured {
+border: 4px solid #f39c12;
+transform: scale(1.05);
+}
+
+.pricing-card.featured:hover {
+transform: translateY(-15px) scale(1.07);
+}
+
+.pricing-badge {
+position: absolute;
+top: -15px;
+left: 50%;
+transform: translateX(-50%);
+background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+color: white;
+padding: 10px 25px;
+border-radius: 25px;
+font-size: 13px;
+font-weight: 800;
+box-shadow: 0 5px 20px rgba(243, 156, 18, 0.4);
+letter-spacing: 1px;
+text-transform: uppercase;
+}
+
+.plan-name {
+font-size: 24px;
+font-weight: 700;
+color: #2c3e50;
+margin-bottom: 20px;
+text-align: center;
+}
+
+.price {
+text-align: center;
+margin-bottom: 30px;
+}
+
+.price-amount {
+font-size: 56px;
+font-weight: 800;
+color: var(--primary);
+line-height: 1;
+}
+
+.price-period {
+font-size: 18px;
+color: #666;
+font-weight: 500;
+}
+
+.price-note {
+font-size: 13px;
+color: #999;
+margin-top: 8px;
+}
+
+.features-list {
+list-style: none;
+margin: 30px 0;
+}
+
+.features-list li {
+padding: 14px 0;
+position: relative;
+padding-left: 35px;
+font-size: 15px;
+color: #555;
+line-height: 1.6;
+}
+
+.features-list li::before {
+content: "✓";
+position: absolute;
+left: 0;
+color: var(--success);
+font-weight: 900;
+font-size: 20px;
+}
+
+.features-list li strong {
+color: #2c3e50;
+font-weight: 700;
+}
+
+.plan-cta {
+width: 100%;
+padding: 16px;
+border: none;
+border-radius: 50px;
+font-size: 16px;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.3s;
+text-transform: uppercase;
+letter-spacing: 1px;
+}
+
+.plan-cta.primary {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.plan-cta.primary:hover {
+transform: translateY(-3px);
+box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+}
+
+.plan-cta.secondary {
+background: #ecf0f1;
+color: #2c3e50;
+}
+
+.plan-cta.secondary:hover {
+background: #d5dbdb;
+}
+
+/* Testimonials */
+.testimonials {
+background: white;
+padding: 100px 20px;
+}
+
+.testimonial-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 30px;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+.testimonial {
+background: #f8f9fa;
+padding: 35px;
+border-radius: 20px;
+position: relative;
+transition: transform 0.3s;
+}
+
+.testimonial:hover {
+transform: translateY(-5px);
+}
+
+.testimonial::before {
+content: '"';
+position: absolute;
+top: 10px;
+left: 20px;
+font-size: 80px;
+color: rgba(102, 126, 234, 0.1);
+font-family: Georgia, serif;
+}
+
+.testimonial-text {
+font-size: 16px;
+color: #555;
+line-height: 1.7;
+margin-bottom: 20px;
+position: relative;
+z-index: 1;
+}
+
+.testimonial-author {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+.author-avatar {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+font-weight: 700;
+color: white;
+}
+
+.author-info {
+flex: 1;
+}
+
+.author-name {
+font-weight: 700;
+color: #2c3e50;
+font-size: 15px;
+}
+
+.author-role {
+font-size: 13px;
+color: #999;
+}
+
+.stars {
+color: #f39c12;
+font-size: 14px;
+}
+
+/* FAQ Section */
+.faq {
+background: #f8f9fa;
+padding: 100px 20px;
+}
+
+.faq-container {
+max-width: 900px;
+margin: 0 auto;
+}
+
+.faq-item {
+background: white;
+padding: 30px;
+border-radius: 15px;
+margin-bottom: 20px;
+box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+cursor: pointer;
+transition: all 0.3s;
+}
+
+.faq-item:hover {
+box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.faq-question {
+font-size: 20px;
+font-weight: 700;
+color: #2c3e50;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.faq-question::after {
+content: '+';
+font-size: 28px;
+color: var(--primary);
+transition: transform 0.3s;
+}
+
+.faq-item.active .faq-question::after {
+transform: rotate(45deg);
+}
+
+.faq-answer {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.3s;
+color: #666;
+font-size: 16px;
+line-height: 1.7;
+}
+
+.faq-item.active .faq-answer {
+max-height: 300px;
+margin-top: 20px;
+}
+
+/* CTA Section */
+.cta-section {
+background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+padding: 100px 20px;
+text-align: center;
+color: white;
+position: relative;
+overflow: hidden;
+}
+
+.cta-section::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+opacity: 0.3;
+}
+
+.cta-content {
+position: relative;
+z-index: 1;
+max-width: 700px;
+margin: 0 auto;
+}
+
+.cta-section h2 {
+font-size: 48px;
+margin-bottom: 25px;
+font-weight: 800;
+}
+
+.cta-section p {
+font-size: 20px;
+margin-bottom: 40px;
+opacity: 0.9;
+}
+
+/* Footer */
+footer {
+background: #1a1a1a;
+color: white;
+padding: 60px 20px 30px;
+}
+
+.footer-content {
+max-width: 1200px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 50px;
+margin-bottom: 50px;
+}
+
+.footer-section h3 {
+font-size: 18px;
+margin-bottom: 20px;
+font-weight: 700;
+}
+
+.footer-section ul {
+list-style: none;
+}
+
+.footer-section ul li {
+margin-bottom: 12px;
+}
+
+.footer-section a {
+color: rgba(255, 255, 255, 0.7);
+text-decoration: none;
+transition: color 0.2s;
+font-size: 15px;
+}
+
+.footer-section a:hover {
+color: var(--primary);
+}
+
+.footer-bottom {
+text-align: center;
+padding-top: 30px;
+border-top: 1px solid rgba(255, 255, 255, 0.1);
+color: rgba(255, 255, 255, 0.5);
+font-size: 14px;
+}
+
+.social-links {
+display: flex;
+gap
